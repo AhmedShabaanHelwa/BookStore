@@ -14,7 +14,7 @@ namespace BookStore.Infrastructure.SchemaDefintions
             /* 1 - Define the table */
             builder.ToTable<Author>("Authors", BookContext.DEFAULT_SCHEMA);
             /* 2 - Set the primary key of the table */
-            builder.HasKey(k => k.AuthorId);
+            //builder.HasKey(k => k.AuthorId);
             //builder.Property(p => p.AuthorId);
 
             /* 3 - Set properties' (columns') constraints */

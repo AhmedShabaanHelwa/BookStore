@@ -1,6 +1,5 @@
 ﻿using BookStore.Domain.Entities;
 using BookStore.Domain.Repository;
-using BookStore.Infrastructure.SchemaDefintions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -31,6 +30,7 @@ namespace BookStore.Infrastructure
         {
 
         }
+        /*
         protected override void OnModelCreating(ModelBuilder builder) 
         {
             // Overriden modification: Create configurations of schemas
@@ -40,6 +40,18 @@ namespace BookStore.Infrastructure
             // Call the base(parent) version of OnModelCreating
             base.OnModelCreating(builder);
         }
+        */
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            // passing the options to base class
+            base.OnModelCreating(builder);
+            builder.Entity<Book>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
+            builder.Entity<Author>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
+            builder.Entity<Review>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
+            //builder.Entity<Price>().Property(p => p.Amount).HasPrecision(2);
+        }
+
         /// <summary>
         /// Effective save of changes in database
         /// </summary>

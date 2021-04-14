@@ -26,5 +26,10 @@ namespace BookStore.Controllers
         {
             return await _booksRepository.GetAsync();
         }
+        [HttpGet, Route("/Books/{id}")]
+        public async Task<Book> GetBooks([FromRoute] Guid id)
+        {
+            return await _booksRepository.GetAsync(id);
+        }
     }
 }

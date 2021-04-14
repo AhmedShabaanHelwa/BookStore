@@ -27,10 +27,13 @@ namespace BookStore.Infrastructure.Repositories
 
         public async Task<Book> GetAsync(Guid id)
         {
-            return await _context.Books
+            var x = await _context.Books
                 .AsNoTracking()
                 .Where(x => x.Id == id)
-                .FirstOrDefaultAsync(x => x.Id == id);
+                .Include(x => x.Author)
+                //.Include(x => x.Reviews)
+                .FirstOrDefaultAsync();
+            return x;
         }
 
         public Task<IEnumerable<Review>> GetReviewsByBookIdAsync(Guid id)

@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace BookStore.Domain.Entities
 {
-    public class Review
+    public class Review : BaseEntity
     {
-        /// <summary>
-        /// Id of review.
-        /// </summary>
-        public Guid ReviewId { get; set; }
         /// <summary>
         /// Review description.
         /// </summary>
@@ -21,6 +19,7 @@ namespace BookStore.Domain.Entities
         /// <summary>
         /// Foriegn key for Books table.
         /// </summary>
+        [ForeignKey("Book")]
         public Guid BookId { get; set; }
         public Book Book { get; set; }
     }

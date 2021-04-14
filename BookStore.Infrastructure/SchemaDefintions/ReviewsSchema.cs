@@ -14,7 +14,7 @@ namespace BookStore.Infrastructure.SchemaDefintions
             /* 1 - Define the table */
             builder.ToTable<Review>("Reviews", BookContext.DEFAULT_SCHEMA);
             /* 2 - Set the primary key of the table */
-            builder.HasKey(k => k.ReviewId);
+            //builder.HasKey(k => k.ReviewId);
             //builder.Property(p => p.ReviewId);
 
             /* 3 - Set properties' (columns') constraints */

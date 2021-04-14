@@ -1,6 +1,6 @@
 ﻿namespace BookStore.Domain.Entities
 {
-    public class Price
+    public class Price : BaseEntity
     {
         /// <summary>
         /// Price amount

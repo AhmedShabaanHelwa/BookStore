@@ -32,8 +32,9 @@ namespace BookStore.Infrastructure.SchemaDefintions
                 .WithMany(author => author.Books)
                 .HasForeignKey(book => book.AuthorId)
                 .IsRequired();
-
-            /* 5 - Customized conversions */
+            
+            // /* 5 - Customized conversions */
+            /*
             builder.Property(p => p.Price)
                 .HasConversion(
                 // Read from database as 50.36:EUR
@@ -44,6 +45,7 @@ namespace BookStore.Infrastructure.SchemaDefintions
                     Amount = Convert.ToDecimal(p.Split(':', StringSplitOptions.None)[0]),
                     Currency = p.Split(':', StringSplitOptions.None)[1]
                 });
+                */
         }
     }
 }

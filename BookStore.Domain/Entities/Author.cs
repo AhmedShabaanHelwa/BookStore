@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace BookStore.Domain.Entities
 {
-    public class Author
+    public class Author : BaseEntity
     {
-        /// <summary>
-        /// Id of Author.
-        /// </summary>
-        public Guid AuthorId { get; set; }
         /// <summary>
         /// Author name.
         /// </summary>

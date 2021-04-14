@@ -1,15 +1,14 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace BookStore.Domain.Entities
 {
-    public class Book
+    public class Book : BaseEntity
     {
-        /// <summary>
-        /// Id of a book
-        /// </summary>
-        public Guid Id { get; set; }
         /// <summary>
         /// Book name
         /// </summary>
@@ -21,18 +20,21 @@ namespace BookStore.Domain.Entities
         /// <summary>
         /// Book price.
         /// </summary>
-        public Price Price { get; set; }
+        public double Price { get; set; }
         /// <summary>
         /// Book Author.
         /// </summary>
-        public Author Author { get; set; }
+        public virtual Author Author { get; set; }
         /// <summary>
         /// Foriegn key for Authors table.
         /// </summary>
+        [ForeignKey("Author")]
         public Guid AuthorId { get; set; }
         /// <summary>
         /// Reference to a list of reviews of the book.
         /// </summary>
+        //[JsonProperty(NullValueHandling = NullValueHandling.Include)]
+        [JsonIgnore]
         public ICollection<Review> Reviews { set; get; }
     }
 }
