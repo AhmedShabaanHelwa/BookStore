@@ -7,38 +7,46 @@ using System.Text;
 
 namespace BookStore.Infrastructure.SchemaDefintions
 {
-    public class AuthorsSchema : IEntityTypeConfiguration<Author>
+    public class CategoriesSchema : IEntityTypeConfiguration<Category>
     {
-        public void Configure(EntityTypeBuilder<Author> builder)
+        public void Configure(EntityTypeBuilder<Category> builder)
         {
             /* 1 - Define the table */
-            builder.ToTable<Author>("Authors", BookContext.DEFAULT_SCHEMA);
+            builder.ToTable<Category>("Categories", BookContext.DEFAULT_SCHEMA);
             /* 2 - Set the primary key of the table */
             builder.HasKey(k => k.Id);
             builder.Property(p => p.Id).HasDefaultValueSql("NEWID()");
+            /* 3 - Seeding with some initial data */
             builder.HasData(
-                new Author
+                new Category 
                 {
                     Id = Guid.NewGuid(),
-                    Name = "Ahmed Shaban",
-                    Nationality = "Egypt"
+                    Name = ".NET"
                 },
-                new Author
+                new Category 
                 {
                     Id = Guid.NewGuid(),
-                    Name = "Omar Alfar",
-                    Nationality = "Egypt"
-                });
+                    Name = "Database"
+                }
+                ,
+                new Category
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Web development"
+                }
+                ,
+                new Category
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Algorithms"
+                }
+                );
 
             /* 3 - Set properties' (columns') constraints */
             builder
                 .Property(p => p.Name)
                 .IsRequired()
                 .HasMaxLength(200);
-            
-            builder
-                .Property(p => p.Nationality)
-                .HasMaxLength(30);
         }
     }
 }

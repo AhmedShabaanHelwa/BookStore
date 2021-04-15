@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace BookStore.Domain.Entities
+namespace BookStore.Domain.Requests.Review
 {
-    public class Review : BaseEntity
+    public class AddReviewRequest
     {
         /// <summary>
         /// Review description.
@@ -16,10 +14,5 @@ namespace BookStore.Domain.Entities
         /// Book rate: 0 to 5, and zero indicates no rate.
         /// </summary>
         public int Rating { get; set; }
-        /// <summary>
-        /// Foriegn key for Books table.
-        /// </summary>
-        public Guid BookId { get; set; }
-        public Book Book { get; set; }
     }
 }

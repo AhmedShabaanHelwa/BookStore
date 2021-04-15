@@ -22,27 +22,37 @@ namespace BookStore.Infrastructure.Repositories
         {
             return await _context.Books
                 .AsNoTracking()
+                .Include(x => x.Author)
+                .Include(x => x.Reviews)
+                .Include(x => x.Category)
                 .ToListAsync();
         }
 
         public async Task<Book> GetAsync(Guid id)
         {
-            var x = await _context.Books
+            var book = await _context.Books
                 .AsNoTracking()
                 .Where(x => x.Id == id)
                 .Include(x => x.Author)
-                //.Include(x => x.Reviews)
+                .Include(x => x.Reviews)
+                .Include(x => x.Category)
                 .FirstOrDefaultAsync();
-            return x;
+            // Check for null
+            if (book is null) return null;
+            // Set state to detached
+            _context.Entry(book).State = EntityState.Detached;
+            return book;
         }
 
-        public Task<IEnumerable<Review>> GetReviewsByBookIdAsync(Guid id)
-        {
-            // TODO:
-            throw new NotImplementedException();
+        public async Task<IEnumerable<Review>> GetReviewsByBookIdAsync(Guid id)
+        {       
+                var book = await _context.Books
+                    .FirstOrDefaultAsync(book => book.Id == id);
+
+                return book.Reviews;
         }
         /// <summary>
-        /// Adds an item to items table in database
+        /// Adds book to books table in database
         /// </summary>
         /// <param name="book"></param>
         /// <returns></returns>
@@ -68,6 +78,31 @@ namespace BookStore.Infrastructure.Repositories
                 _context.Entry(book).State = EntityState.Modified;
                 return book;
             }
+        }
+
+        public async Task<IEnumerable<Book>> GetBooksByAuthorIdAsync(Guid id)
+        {
+            var books = await _context.Books
+                .Where(book => !book.IsInactive)
+                .Where(book => book.AuthorId == id)
+                .Include(book => book.Author)
+                .Include(book => book.Reviews)
+                .Include(book => book.Category)
+                .ToListAsync();
+
+            return books;
+        }
+
+        public async Task<IEnumerable<Book>> GetBooksByCategoryIdAsync(Guid id)
+        {
+            var books = await _context.Books
+                .Where(x => !x.IsInactive)
+                .Where(book => book.CategoryId == id)
+                .Include(x => x.Author)
+                .Include(x => x.Reviews)
+                .Include(x => x.Category)
+                .ToListAsync();
+            return books;
         }
     }
 }

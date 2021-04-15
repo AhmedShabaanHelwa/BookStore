@@ -4,14 +4,16 @@ using BookStore.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BookStore.Infrastructure.Migrations
 {
     [DbContext(typeof(BookContext))]
-    partial class BookContextModelSnapshot : ModelSnapshot
+    [Migration("20210414215244_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,13 +44,13 @@ namespace BookStore.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("543afeac-e500-4d2b-a4ce-3490570c47b9"),
+                            Id = new Guid("cdaf45f8-cfd2-417d-b1e0-b6cf1634498f"),
                             Name = "Ahmed Shaban",
                             Nationality = "Egypt"
                         },
                         new
                         {
-                            Id = new Guid("4b78f43e-e6fc-445b-b64e-33891219e17f"),
+                            Id = new Guid("94bc5180-dd6b-4652-af92-75f8bb58a194"),
                             Name = "Omar Alfar",
                             Nationality = "Egypt"
                         });
@@ -84,7 +86,7 @@ namespace BookStore.Infrastructure.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Books", "BookStore");
+                    b.ToTable("Items", "BookStore");
                 });
 
             modelBuilder.Entity("BookStore.Domain.Entities.Category", b =>
@@ -106,22 +108,22 @@ namespace BookStore.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("aeda5bfe-2d4f-42df-ada8-fd910f7e671c"),
+                            Id = new Guid("5241da1f-a2e7-4317-89a6-30f669209f01"),
                             Name = ".NET"
                         },
                         new
                         {
-                            Id = new Guid("30d7d246-9881-4b5a-9f75-fe3653912ad3"),
+                            Id = new Guid("cd95e815-f507-4696-bf8c-e6fec0b50cb2"),
                             Name = "Database"
                         },
                         new
                         {
-                            Id = new Guid("76f2fa04-ff9c-42f2-8678-b334680ca598"),
+                            Id = new Guid("bc361689-a8e5-4cca-b1f9-22f14bfef606"),
                             Name = "Web development"
                         },
                         new
                         {
-                            Id = new Guid("b5ba199c-a106-4f62-bb68-ec08950c4258"),
+                            Id = new Guid("2374b18c-fac9-4392-a03f-788136f44f2a"),
                             Name = "Algorithms"
                         });
                 });

@@ -1,3 +1,4 @@
+using BookStore.Domain.Extensions;
 using BookStore.Domain.Repository;
 using BookStore.Infrastructure;
 using BookStore.Infrastructure.Repositories;
@@ -31,13 +32,21 @@ namespace BookStore
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers();
+            services.AddControllers()
+               // .AddValidation()
+                .AddJsonOptions(opt => opt.JsonSerializerOptions.IgnoreNullValues = true);
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BookStore", Version = "v1" });
             });
-            services.AddDbContext<BookContext>(op => op.UseSqlServer(Configuration.GetConnectionString("BookStore")));
-            services.AddScoped<IBooksRepository, BooksRepository>();
+            services
+                .AddScoped<IBooksRepository, BooksRepository>()
+                .AddScoped<IAuthorRepository, AuthorRepository>()
+                .AddScoped<ICategoryRepository, CategoryRepository>()
+                .AddScoped<IReviewRepository, ReviewRepository>();
+            services.AddDbContext<BookContext>(op => op.UseSqlServer(Configuration.GetConnectionString("BookStore")))
+                .AddServices()
+                .AddMappers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
