@@ -18,27 +18,31 @@ namespace BookStore.Infrastructure.SchemaDefintions
             builder.Property(p => p.Id).HasDefaultValueSql("NEWID()");
             /* 3 - Seeding with some initial data */
             builder.HasData(
-                new Category 
+                new Category
                 {
                     Id = Guid.NewGuid(),
-                    Name = ".NET"
+                    Name = ".NET",
+                    TenantId = new Guid("D704C4F3-0EA7-4B2F-8C58-D7D0F10E6416")
                 },
-                new Category 
+                new Category
                 {
                     Id = Guid.NewGuid(),
-                    Name = "Database"
+                    Name = "Database",
+                    TenantId = new Guid("D704C4F3-0EA7-4B2F-8C58-D7D0F10E6416")
                 }
                 ,
                 new Category
                 {
                     Id = Guid.NewGuid(),
-                    Name = "Web development"
+                    Name = "Web development",
+                    TenantId = new Guid("D704C4F3-0EA7-4B2F-8C58-D7D0F10E6416")
                 }
                 ,
                 new Category
                 {
                     Id = Guid.NewGuid(),
-                    Name = "Algorithms"
+                    Name = "Algorithms",
+                    TenantId = new Guid("D704C4F3-0EA7-4B2F-8C58-D7D0F10E6416")
                 }
                 );
 
@@ -47,6 +51,10 @@ namespace BookStore.Infrastructure.SchemaDefintions
                 .Property(p => p.Name)
                 .IsRequired()
                 .HasMaxLength(200);
+            builder
+                .HasOne(category => category.Tenant)
+                .WithMany()
+                .HasForeignKey(category => category.TenantId);
         }
     }
 }

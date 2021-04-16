@@ -32,5 +32,7 @@ namespace BookStore.Domain.Entities
         /// </summary>
         public ICollection<Review> Reviews { set; get; }
         public bool IsInactive { get; set; }
+        public Guid TenantId { get; set; }
+        public virtual Tenant Tenant { get; set; }
     }
 }

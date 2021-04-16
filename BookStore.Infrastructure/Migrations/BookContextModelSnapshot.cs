@@ -35,22 +35,29 @@ namespace BookStore.Infrastructure.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TenantId");
 
                     b.ToTable("Authors", "BookStore");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("543afeac-e500-4d2b-a4ce-3490570c47b9"),
+                            Id = new Guid("d69bea99-4d36-4818-a9f9-f315ade5ea8c"),
                             Name = "Ahmed Shaban",
-                            Nationality = "Egypt"
+                            Nationality = "Egypt",
+                            TenantId = new Guid("d704c4f3-0ea7-4b2f-8c58-d7d0f10e6416")
                         },
                         new
                         {
-                            Id = new Guid("4b78f43e-e6fc-445b-b64e-33891219e17f"),
+                            Id = new Guid("5c64d134-c824-4d42-a500-9783138bce96"),
                             Name = "Omar Alfar",
-                            Nationality = "Egypt"
+                            Nationality = "Egypt",
+                            TenantId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
 
@@ -78,11 +85,16 @@ namespace BookStore.Infrastructure.Migrations
                     b.Property<string>("Price")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("TenantId");
 
                     b.ToTable("Books", "BookStore");
                 });
@@ -99,30 +111,39 @@ namespace BookStore.Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TenantId");
 
                     b.ToTable("Categories", "BookStore");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("aeda5bfe-2d4f-42df-ada8-fd910f7e671c"),
-                            Name = ".NET"
+                            Id = new Guid("678f791c-2250-4f17-9c80-1eec5a248ba6"),
+                            Name = ".NET",
+                            TenantId = new Guid("d704c4f3-0ea7-4b2f-8c58-d7d0f10e6416")
                         },
                         new
                         {
-                            Id = new Guid("30d7d246-9881-4b5a-9f75-fe3653912ad3"),
-                            Name = "Database"
+                            Id = new Guid("223bafc2-c4c4-416a-b358-6c077a127096"),
+                            Name = "Database",
+                            TenantId = new Guid("d704c4f3-0ea7-4b2f-8c58-d7d0f10e6416")
                         },
                         new
                         {
-                            Id = new Guid("76f2fa04-ff9c-42f2-8678-b334680ca598"),
-                            Name = "Web development"
+                            Id = new Guid("6f265411-85e3-492d-a1ac-f8bf147bdfe4"),
+                            Name = "Web development",
+                            TenantId = new Guid("d704c4f3-0ea7-4b2f-8c58-d7d0f10e6416")
                         },
                         new
                         {
-                            Id = new Guid("b5ba199c-a106-4f62-bb68-ec08950c4258"),
-                            Name = "Algorithms"
+                            Id = new Guid("a6c9fe1b-c590-4a27-bb2c-b532a318c617"),
+                            Name = "Algorithms",
+                            TenantId = new Guid("d704c4f3-0ea7-4b2f-8c58-d7d0f10e6416")
                         });
                 });
 
@@ -143,11 +164,53 @@ namespace BookStore.Infrastructure.Migrations
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BookId");
 
+                    b.HasIndex("TenantId");
+
                     b.ToTable("Reviews", "BookStore");
+                });
+
+            modelBuilder.Entity("BookStore.Domain.Entities.Tenant", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Domain")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tenant");
+                });
+
+            modelBuilder.Entity("BookStore.Domain.Entities.Author", b =>
+                {
+                    b.HasOne("BookStore.Domain.Entities.Tenant", "Tenant")
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("BookStore.Domain.Entities.Book", b =>
@@ -164,9 +227,28 @@ namespace BookStore.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("BookStore.Domain.Entities.Tenant", "Tenant")
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Author");
 
                     b.Navigation("Category");
+
+                    b.Navigation("Tenant");
+                });
+
+            modelBuilder.Entity("BookStore.Domain.Entities.Category", b =>
+                {
+                    b.HasOne("BookStore.Domain.Entities.Tenant", "Tenant")
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("BookStore.Domain.Entities.Review", b =>
@@ -177,7 +259,15 @@ namespace BookStore.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("BookStore.Domain.Entities.Tenant", "Tenant")
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Book");
+
+                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("BookStore.Domain.Entities.Author", b =>

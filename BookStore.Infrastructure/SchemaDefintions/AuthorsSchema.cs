@@ -21,7 +21,8 @@ namespace BookStore.Infrastructure.SchemaDefintions
                 {
                     Id = Guid.NewGuid(),
                     Name = "Ahmed Shaban",
-                    Nationality = "Egypt"
+                    Nationality = "Egypt",
+                    TenantId = new Guid("D704C4F3-0EA7-4B2F-8C58-D7D0F10E6416")
                 },
                 new Author
                 {
@@ -39,6 +40,13 @@ namespace BookStore.Infrastructure.SchemaDefintions
             builder
                 .Property(p => p.Nationality)
                 .HasMaxLength(30);
+
+            /* 4 - Set relationships between tables */
+            
+            builder
+                .HasOne(author => author.Tenant)
+                .WithMany()
+                .HasForeignKey(author => author.TenantId);
         }
     }
 }

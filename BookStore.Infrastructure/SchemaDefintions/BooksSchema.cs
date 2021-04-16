@@ -11,7 +11,6 @@ namespace BookStore.Infrastructure.SchemaDefintions
     {
         public void Configure(EntityTypeBuilder<Book> builder)
         {
-#if (true)
             /* 1 - Define the table */
             builder.ToTable<Book>("Books", BookContext.DEFAULT_SCHEMA);
             /* 2 - Set the primary key of the table */
@@ -25,16 +24,21 @@ namespace BookStore.Infrastructure.SchemaDefintions
                 .HasMaxLength(200);
 
             /* 4 - Set relationships between tables */
-            // Book - author : One-to-many
+            // Book - author : Many-to-one
             builder
                 .HasOne(book => book.Author)
                 .WithMany(author => author.Books)
                 .HasForeignKey(book => book.AuthorId);
+            // Book - category : Many-to-One
             builder
                 .HasOne(book => book.Category)
                 .WithMany(author => author.Books)
                 .HasForeignKey(book => book.CategoryId);
-
+            
+            builder
+                .HasOne(book => book.Tenant)
+                .WithMany()
+                .HasForeignKey(book => book.TenantId);
 
             /* 5 - Customized conversions */
             builder.Property(p => p.Price)
@@ -48,6 +52,5 @@ namespace BookStore.Infrastructure.SchemaDefintions
                     Currency = p.Split(':', StringSplitOptions.None)[1]
                 });
         }
-#endif
-        }
+    }
 }

@@ -14,5 +14,7 @@ namespace BookStore.Domain.Entities
         /// Reference to the authors books.
         /// </summary>
         public ICollection<Book> Books { get; set; }
+        public Guid TenantId { get; set; }
+        public virtual Tenant Tenant { get; set; }
     }
 }

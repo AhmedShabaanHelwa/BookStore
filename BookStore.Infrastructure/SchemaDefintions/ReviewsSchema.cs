@@ -27,6 +27,12 @@ namespace BookStore.Infrastructure.SchemaDefintions
                 .HasOne(review => review.Book)
                 .WithMany(book => book.Reviews)
                 .HasForeignKey(k => k.BookId);
+            
+            builder
+                .HasOne(review => review.Tenant)
+                .WithMany()
+                .HasForeignKey(review => review.TenantId);
+            
         }
     }
 }

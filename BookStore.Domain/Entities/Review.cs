@@ -21,5 +21,7 @@ namespace BookStore.Domain.Entities
         /// </summary>
         public Guid BookId { get; set; }
         public Book Book { get; set; }
+        public Guid TenantId { get; set; }
+        public virtual Tenant Tenant { get; set; }
     }
 }
