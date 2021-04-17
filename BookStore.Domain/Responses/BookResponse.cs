@@ -28,6 +28,7 @@ namespace BookStore.Domain.Responses
         /// <summary>
         /// Reference to a list of reviews of the book.
         /// </summary>
-        public ICollection<ReviewResponse> Reviews { set; get; }
+        //public ICollection<ReviewResponse> Reviews { set; get; }
+        public double AvgRating { set; get; }
     }
 }

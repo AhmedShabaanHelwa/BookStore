@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BookStore.Infrastructure.Migrations
 {
-    public partial class InitialCrateWithAlter : Migration
+    public partial class InitialCreateWithTenant : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,19 +11,20 @@ namespace BookStore.Infrastructure.Migrations
                 name: "BookStore");
 
             migrationBuilder.CreateTable(
-                name: "Tenant",
+                name: "Tenants",
+                schema: "BookStore",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Domain = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
+                    Domain = table.Column<string>(type: "nvarchar(800)", maxLength: 800, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(600)", maxLength: 600, nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     UpdatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tenant", x => x.Id);
+                    table.PrimaryKey("PK_Tenants", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -40,11 +41,11 @@ namespace BookStore.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Authors", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Authors_Tenant_TenantId",
+                        name: "FK_Authors_Tenants_TenantId",
                         column: x => x.TenantId,
-                        principalTable: "Tenant",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalSchema: "BookStore",
+                        principalTable: "Tenants",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -60,11 +61,11 @@ namespace BookStore.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Categories_Tenant_TenantId",
+                        name: "FK_Categories_Tenants_TenantId",
                         column: x => x.TenantId,
-                        principalTable: "Tenant",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalSchema: "BookStore",
+                        principalTable: "Tenants",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -98,11 +99,11 @@ namespace BookStore.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Books_Tenant_TenantId",
+                        name: "FK_Books_Tenants_TenantId",
                         column: x => x.TenantId,
-                        principalTable: "Tenant",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalSchema: "BookStore",
+                        principalTable: "Tenants",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -127,12 +128,18 @@ namespace BookStore.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Reviews_Tenant_TenantId",
+                        name: "FK_Reviews_Tenants_TenantId",
                         column: x => x.TenantId,
-                        principalTable: "Tenant",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalSchema: "BookStore",
+                        principalTable: "Tenants",
+                        principalColumn: "Id");
                 });
+
+            migrationBuilder.InsertData(
+                schema: "BookStore",
+                table: "Tenants",
+                columns: new[] { "Id", "CreatedAt", "Description", "Domain", "Name", "UpdatedAt" },
+                values: new object[] { new Guid("d704c4f3-0ea7-4b2f-8c58-d7d0f10e6416"), new DateTimeOffset(new DateTime(2021, 4, 16, 14, 15, 12, 959, DateTimeKind.Unspecified).AddTicks(8322), new TimeSpan(0, 0, 0, 0, 0)), "This is the default landing domain for Ahmed bookstores.", "default.ahmedbookstores.net", "Default landing", new DateTimeOffset(new DateTime(2021, 4, 16, 14, 15, 12, 959, DateTimeKind.Unspecified).AddTicks(9362), new TimeSpan(0, 0, 0, 0, 0)) });
 
             migrationBuilder.InsertData(
                 schema: "BookStore",
@@ -140,8 +147,8 @@ namespace BookStore.Infrastructure.Migrations
                 columns: new[] { "Id", "Name", "Nationality", "TenantId" },
                 values: new object[,]
                 {
-                    { new Guid("d69bea99-4d36-4818-a9f9-f315ade5ea8c"), "Ahmed Shaban", "Egypt", new Guid("d704c4f3-0ea7-4b2f-8c58-d7d0f10e6416") },
-                    { new Guid("5c64d134-c824-4d42-a500-9783138bce96"), "Omar Alfar", "Egypt", new Guid("00000000-0000-0000-0000-000000000000") }
+                    { new Guid("bcecae43-f814-4d29-8319-31f6781c16c5"), "Ahmed Shaban", "Egypt", new Guid("d704c4f3-0ea7-4b2f-8c58-d7d0f10e6416") },
+                    { new Guid("42d3c3d0-4131-4744-99f6-dae8b041d9f4"), "Omar Alfar", "Egypt", new Guid("d704c4f3-0ea7-4b2f-8c58-d7d0f10e6416") }
                 });
 
             migrationBuilder.InsertData(
@@ -150,10 +157,10 @@ namespace BookStore.Infrastructure.Migrations
                 columns: new[] { "Id", "Name", "TenantId" },
                 values: new object[,]
                 {
-                    { new Guid("678f791c-2250-4f17-9c80-1eec5a248ba6"), ".NET", new Guid("d704c4f3-0ea7-4b2f-8c58-d7d0f10e6416") },
-                    { new Guid("223bafc2-c4c4-416a-b358-6c077a127096"), "Database", new Guid("d704c4f3-0ea7-4b2f-8c58-d7d0f10e6416") },
-                    { new Guid("6f265411-85e3-492d-a1ac-f8bf147bdfe4"), "Web development", new Guid("d704c4f3-0ea7-4b2f-8c58-d7d0f10e6416") },
-                    { new Guid("a6c9fe1b-c590-4a27-bb2c-b532a318c617"), "Algorithms", new Guid("d704c4f3-0ea7-4b2f-8c58-d7d0f10e6416") }
+                    { new Guid("27fc8e45-c17e-45a2-9d1b-2b17637ec097"), ".NET", new Guid("d704c4f3-0ea7-4b2f-8c58-d7d0f10e6416") },
+                    { new Guid("d2c47e89-5a96-4f80-8526-c80b7605569f"), "Database", new Guid("d704c4f3-0ea7-4b2f-8c58-d7d0f10e6416") },
+                    { new Guid("59c67919-2d8a-47de-a3ca-392b4a1f4e67"), "Web development", new Guid("d704c4f3-0ea7-4b2f-8c58-d7d0f10e6416") },
+                    { new Guid("02c5162d-73c8-4881-a05f-2cf2aa4ea4d4"), "Algorithms", new Guid("d704c4f3-0ea7-4b2f-8c58-d7d0f10e6416") }
                 });
 
             migrationBuilder.CreateIndex(
@@ -218,7 +225,8 @@ namespace BookStore.Infrastructure.Migrations
                 schema: "BookStore");
 
             migrationBuilder.DropTable(
-                name: "Tenant");
+                name: "Tenants",
+                schema: "BookStore");
         }
     }
 }

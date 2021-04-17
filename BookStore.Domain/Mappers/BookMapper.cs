@@ -3,6 +3,7 @@ using BookStore.Domain.Requests.Book;
 using BookStore.Domain.Responses;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace BookStore.Domain.Mappers
@@ -11,11 +12,17 @@ namespace BookStore.Domain.Mappers
     {
         private readonly IAuthorMapper _authorMapper;
         private readonly ICategoryMapper _categoryMapper;
-        public BookMapper(IAuthorMapper authorMapper, ICategoryMapper categoryMapper)
+        private readonly IReviewMapper _reviewsMapper;
+        private readonly Tenant _tenant;
+        public BookMapper(IAuthorMapper authorMapper, ICategoryMapper categoryMapper,
+            IReviewMapper reviewsMapper, Tenant tenant)
         {
             _authorMapper = authorMapper;
             _categoryMapper = categoryMapper;
+            _reviewsMapper = reviewsMapper;
+            _tenant = tenant;
         }
+
         public Book Map(AddBookRequest request)
         {
             if (request is null) return null;
@@ -25,6 +32,7 @@ namespace BookStore.Domain.Mappers
                 Name = request.Name,
                 AuthorId = request.AuthorId,
                 CategoryId = request.CategoryId,
+                TenantId = _tenant.Id
             };
 
             if (request.Price != null)
@@ -73,8 +81,24 @@ namespace BookStore.Domain.Mappers
             {
                 response.Price = new PriceResponse { Currency = request.Price.Currency, Amount = request.Price.Amount };
             }
+            if (request.Reviews != null)
+            {
+                response.AvgRating = calcualateAverageRate(request.Reviews);
+            }
 
             return response;
+        }
+
+        private float calcualateAverageRate(ICollection<Review> reviews)
+        {
+            if (reviews is null) return 0.0F;
+            float sum = 0.0F;
+            foreach (var review in reviews)
+            {
+
+                sum += (float)review?.Rating;
+            }
+            return sum / reviews.Count();
         }
     }
 }

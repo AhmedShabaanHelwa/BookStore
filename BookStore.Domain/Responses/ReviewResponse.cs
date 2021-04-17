@@ -14,6 +14,6 @@ namespace BookStore.Domain.Responses
         /// <summary>
         /// Book rate: 0 to 5, and zero indicates no rate.
         /// </summary>
-        public decimal AverageRating { get; set; }
+        public float AverageRating { get; set; }
     }
 }

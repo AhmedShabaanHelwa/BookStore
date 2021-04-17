@@ -15,10 +15,10 @@ namespace BookStore.Domain.Extensions
         public static IServiceCollection AddMappers(this IServiceCollection services)
         {
             services
-                .AddSingleton<IBookMapper, BookMapper>()
-                .AddSingleton<IAuthorMapper, AuthorMapper>()
-                .AddSingleton<IReviewMapper, ReviewMapper>()
-                .AddSingleton<ICategoryMapper, CategoryMapper>();
+                .AddScoped<IBookMapper, BookMapper>()
+                .AddScoped<IAuthorMapper, AuthorMapper>()
+                .AddScoped<IReviewMapper, ReviewMapper>()
+                .AddScoped<ICategoryMapper, CategoryMapper>();
             return services;
         }
         public static IServiceCollection AddServices(this IServiceCollection services)

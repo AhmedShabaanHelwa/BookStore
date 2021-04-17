@@ -54,7 +54,8 @@ namespace BookStore.Infrastructure.SchemaDefintions
             builder
                 .HasOne(category => category.Tenant)
                 .WithMany()
-                .HasForeignKey(category => category.TenantId);
+                .HasForeignKey(category => category.TenantId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

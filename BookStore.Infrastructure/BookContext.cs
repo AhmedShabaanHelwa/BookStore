@@ -22,7 +22,7 @@ namespace BookStore.Infrastructure
 
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Category> Categories { get; set; }
-
+        public DbSet<Tenant> Tenants { get; set; }
 
         /// <summary>
         /// Constructor of context class to pass options to the DbContext base class
@@ -36,26 +36,16 @@ namespace BookStore.Infrastructure
         protected override void OnModelCreating(ModelBuilder builder) 
         {
             // Overriden modification: Create configurations of schemas
-            builder.ApplyConfiguration(new BooksSchema());
+            builder.ApplyConfiguration(new TenantsSchema());
             builder.ApplyConfiguration(new AuthorsSchema());
             builder.ApplyConfiguration(new ReviewsSchema());
             builder.ApplyConfiguration(new CategoriesSchema());
+            builder.ApplyConfiguration(new BooksSchema());
+
             // Call the base(parent) version of OnModelCreating
             base.OnModelCreating(builder);
         }
         
-        /*
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            // passing the options to base class
-            base.OnModelCreating(builder);
-            builder.Entity<Book>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
-            builder.Entity<Author>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
-            builder.Entity<Review>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
-            //builder.Entity<Price>().Property(p => p.Amount).HasPrecision(2);
-        }
-        */
-
         /// <summary>
         /// Effective save of changes in database
         /// </summary>

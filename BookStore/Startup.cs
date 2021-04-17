@@ -1,7 +1,10 @@
+using BookStore.Domain.Entities;
 using BookStore.Domain.Extensions;
 using BookStore.Domain.Repository;
+using BookStore.Domain.Shared;
 using BookStore.Infrastructure;
 using BookStore.Infrastructure.Repositories;
+using BookStore.TenancyManagement;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -47,6 +50,9 @@ namespace BookStore
             services.AddDbContext<BookContext>(op => op.UseSqlServer(Configuration.GetConnectionString("BookStore")))
                 .AddServices()
                 .AddMappers();
+            // Register multi-tenancy
+            services.AddMultitenancy<Tenant, TenantResolver>();
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,7 +66,9 @@ namespace BookStore
             }
 
             app.UseHttpsRedirection();
-
+            // place tencancy resolver in pipeline
+            app.UseMultitenancy<Tenant>();
+            
             app.UseRouting();
 
             app.UseAuthorization();

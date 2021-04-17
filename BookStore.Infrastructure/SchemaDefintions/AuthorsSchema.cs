@@ -28,7 +28,8 @@ namespace BookStore.Infrastructure.SchemaDefintions
                 {
                     Id = Guid.NewGuid(),
                     Name = "Omar Alfar",
-                    Nationality = "Egypt"
+                    Nationality = "Egypt",
+                    TenantId = new Guid("D704C4F3-0EA7-4B2F-8C58-D7D0F10E6416")
                 });
 
             /* 3 - Set properties' (columns') constraints */
@@ -46,7 +47,8 @@ namespace BookStore.Infrastructure.SchemaDefintions
             builder
                 .HasOne(author => author.Tenant)
                 .WithMany()
-                .HasForeignKey(author => author.TenantId);
+                .HasForeignKey(author => author.TenantId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

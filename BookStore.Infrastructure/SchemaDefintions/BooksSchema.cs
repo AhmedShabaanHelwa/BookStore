@@ -38,7 +38,8 @@ namespace BookStore.Infrastructure.SchemaDefintions
             builder
                 .HasOne(book => book.Tenant)
                 .WithMany()
-                .HasForeignKey(book => book.TenantId);
+                .HasForeignKey(book => book.TenantId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             /* 5 - Customized conversions */
             builder.Property(p => p.Price)

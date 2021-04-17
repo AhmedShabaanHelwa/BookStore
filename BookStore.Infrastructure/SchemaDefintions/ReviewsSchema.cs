@@ -31,8 +31,9 @@ namespace BookStore.Infrastructure.SchemaDefintions
             builder
                 .HasOne(review => review.Tenant)
                 .WithMany()
-                .HasForeignKey(review => review.TenantId);
-            
+                .HasForeignKey(review => review.TenantId)
+                .OnDelete(DeleteBehavior.NoAction);
+
         }
     }
 }
