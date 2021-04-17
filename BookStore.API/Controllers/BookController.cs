@@ -32,7 +32,7 @@ namespace BookStore.Controllers
         /// <param name="pageIndex">Page number</param>
         /// <returns></returns>
         [HttpGet, Route(AppSettings.ApiVersion+"book")]
-        public async Task<IActionResult> GetBooks([FromQuery] int pageSize = 10, [FromQuery] int pageIndex = 0)
+        public async Task<IActionResult> GetBooksPaginated([FromQuery] int pageSize = 10, [FromQuery] int pageIndex = 0)
         {
             var result = await _bookService.GetBooksAsync();
             var totalItems = result.Count();
@@ -51,7 +51,7 @@ namespace BookStore.Controllers
         /// Gets all books - NON paginated form
         /// </summary>
         /// <returns></returns>
-        [HttpGet, Route(AppSettings.ApiVersion + "book")]
+        [HttpGet, Route(AppSettings.ApiVersion + "book"+"/all")]
         public async Task<IActionResult> GetBooks()
         {
             var result = await _bookService.GetBooksAsync();
