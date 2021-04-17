@@ -25,7 +25,7 @@ namespace BookStore.API.Controllers
         /// <summary>
         /// Gets all authors - Paginated Form
         /// </summary>
-        /// <param name="pageSize">Number of books per page</param>
+        /// <param name="pageSize">Number of authors per page</param>
         /// <param name="pageIndex">Page number</param>
         /// <returns></returns>
         [HttpGet, Route(AppSettings.ApiVersion + _controllerName)]
@@ -96,7 +96,7 @@ namespace BookStore.API.Controllers
         /// </summary>
         /// <param name="request">Body of added author</param>
         /// <returns></returns>
-        [HttpPost, Route(AppSettings.ApiVersion + _controllerName + "{id}")]
+        [HttpPost, Route(AppSettings.ApiVersion + _controllerName)]
         public async Task<IActionResult> AddAuthor([FromBody] AddAuthorRequest request)
         {
             var result = await _authorsService.AddAuthorAsync(request);
