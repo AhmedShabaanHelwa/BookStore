@@ -51,7 +51,7 @@ namespace BookStore.Domain.Services
             }
 
             var result = _bookRepository.Update(existingRecord);
-            //var modifiedRecords = await _bookRepository.UnitOfWork.SaveChangesAsync();
+            await _bookRepository.UnitOfWork.SaveChangesAsync();
             return _bookMapper.Map(result);
         }
 
