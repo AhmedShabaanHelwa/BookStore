@@ -17,21 +17,22 @@ namespace BookStore.Controllers
     [Route("api/[controller]")]
     public class BookController : ControllerBase
     {
-        private readonly IBooksRepository _booksRepository;
+        const string _controllerName = "book/";
         private readonly IBookService _bookService;
 
         public BookController(IBooksRepository booksRepository, IBookService bookService)
         {
-            _booksRepository = booksRepository;
             _bookService = bookService;
         }
+
+
         /// <summary>
         /// Gets all books - Paginated Form
         /// </summary>
         /// <param name="pageSize">Number of books per page</param>
         /// <param name="pageIndex">Page number</param>
         /// <returns></returns>
-        [HttpGet, Route(AppSettings.ApiVersion+"book")]
+        [HttpGet, Route(AppSettings.ApiVersion+_controllerName)]
         public async Task<IActionResult> GetBooksPaginated([FromQuery] int pageSize = 10, [FromQuery] int pageIndex = 0)
         {
             var result = await _bookService.GetBooksAsync();
@@ -47,28 +48,38 @@ namespace BookStore.Controllers
 
             return Ok(result);
         }
+
+
         /// <summary>
         /// Gets all books - NON paginated form
         /// </summary>
         /// <returns></returns>
-        [HttpGet, Route(AppSettings.ApiVersion + "book"+"/all")]
+        [HttpGet, Route(AppSettings.ApiVersion + _controllerName+"all")]
         public async Task<IActionResult> GetBooks()
         {
             var result = await _bookService.GetBooksAsync();
             return Ok(result);
         }
+
+
         /// <summary>
         /// Gets book by its id
         /// </summary>
         /// <param name="id">Book id</param>
         /// <returns></returns>
-        [HttpGet, Route(AppSettings.ApiVersion + "book/{id}")]
+        [HttpGet, Route(AppSettings.ApiVersion + _controllerName+ "{id}")]
         public async Task<IActionResult> GetBookById([FromRoute] Guid id)
         {
             var result =  await _bookService.GetBookAsync(new GetBookRequest { Id = id });
             return Ok(result);
         }
-        [HttpPost, Route(AppSettings.ApiVersion + "book")]
+
+        /// <summary>
+        /// Adds (POST) new book to the store
+        /// </summary>
+        /// <param name="request">Body of added book</param>
+        /// <returns></returns>
+        [HttpPost, Route(AppSettings.ApiVersion + _controllerName)]
         public async Task<IActionResult> PostBook(AddBookRequest request)
         {
             var result = await _bookService.AddBookAsync(request);
@@ -81,12 +92,14 @@ namespace BookStore.Controllers
                 return ValidationProblem("Request contains invalid id of Author or category");
             }
         }
+
+
         /// <summary>
         /// Updates a book by id
         /// </summary>
-        /// <param name="request"></param>
+        /// <param name="request">Body of updated book</param>
         /// <returns></returns>
-        [HttpPut, Route(AppSettings.ApiVersion + "book/{id}")]
+        [HttpPut, Route(AppSettings.ApiVersion + _controllerName +"{id}")]
         public async Task<IActionResult> UpdateBook(EditBookRequest request)
         {
             var result = await _bookService.EditBookAsync(request);
@@ -99,6 +112,8 @@ namespace BookStore.Controllers
                 return ValidationProblem("Request contains invalid id of Author or category");
             }
         }
+
+
         /// <summary>
         /// Soft delete of a book
         /// </summary>
