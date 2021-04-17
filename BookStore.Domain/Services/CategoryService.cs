@@ -27,7 +27,7 @@ namespace BookStore.Domain.Services
         }
         public async Task<CategoryResponse> AddCategoryAsync(AddCategoryRequest category)
         {
-            if (category is null) throw new ArgumentException($"Auhthor is not null");
+            if (category is null) throw new ArgumentException($"Category is  null");
             // create author entity
             var author = new Category { Name = category.Name };
 
