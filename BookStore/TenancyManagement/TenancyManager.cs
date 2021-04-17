@@ -14,11 +14,11 @@ using System.Threading.Tasks;
 
 namespace BookStore.TenancyManagement
 {
-    public class TenantResolver : MemoryCacheTenantResolver<Tenant>
+    public class TenancyManager : MemoryCacheTenantResolver<Tenant>
     {
         private readonly BookContext _context;
         private readonly AppSettings _settings;
-        public TenantResolver(
+        public TenancyManager(
             BookContext context, IMemoryCache cache, ILoggerFactory loggerFactory, IOptions<AppSettings> settings)
              : base(cache, loggerFactory)
         {

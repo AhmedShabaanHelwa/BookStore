@@ -51,7 +51,7 @@ namespace BookStore
                 .AddServices()
                 .AddMappers();
             // Register multi-tenancy
-            services.AddMultitenancy<Tenant, TenantResolver>();
+            services.AddMultitenancy<Tenant, TenancyManager>();
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
         }
 
